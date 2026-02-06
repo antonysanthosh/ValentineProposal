@@ -289,12 +289,13 @@ img.style.height = size + "px";
 
 let x, y;
 let attempts = 0;
+let minDistance = 80;
 
 do {
 x = Math.random() * (window.innerWidth - size);
 y = Math.random() * (window.innerHeight - size);
 attempts++;
-} while (isTooCloseToCenter(x, y, size) && attempts < 15);
+} while (isTooCloseToCenter(x, y, size) && attempts < 20);
 
 img.style.left = x + "px";
 img.style.top = y + "px";
