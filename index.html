@@ -207,21 +207,103 @@ const popup = document.getElementById("popup");
 const finalPage = document.getElementById("finalPage");
 const music = document.getElementById("bgMusic");
 const muteBtn = document.getElementById("muteBtn");
-const MUSIC_START_TIME = 20;
-const MUSIC_PLAY_DURATION = 18;
 
 const memoryPhotos = [
-"photo1.jpg",
-"photo2.jpg",
-"photo3.jpg",
-"photo4.jpg",
-"photo5.jpg"
+"IMG68.jpeg",
+"IMG69.jpeg",
+"IMG70.jpeg",
+"IMG71.jpeg",
+"IMG72.jpeg",
+"IMG26.jpeg",
+"IMG27.jpeg",
+"IMG28.jpeg",
+"IMG29.jpeg",
+"IMG30.jpeg",
+"IMG31.jpeg",
+"IMG32.jpeg",
+"IMG33.jpeg",
+"IMG34.jpeg",
+"IMG35.jpeg",
+"IMG36.jpeg",
+"IMG37.jpeg",
+"IMG38.jpeg",
+"IMG39.jpeg",
+"IMG40.jpeg",
+"IMG41.jpeg",
+"IMG42.jpeg",
+"IMG43.jpeg",
+"IMG44.jpeg",
+"IMG45.jpeg",
+"IMG46.jpeg"
 ];
 
 
 /* 🎵 MUSIC CONFIG */
 const MUSIC_START_TIME = 5; // seconds
 const MUSIC_PLAY_DURATION = 180; // seconds
+
+function isTooCloseToCenter(x, y, size) {
+const centerX = window.innerWidth / 2;
+const centerY = window.innerHeight / 2;
+
+const safeWidth = 200;
+const safeHeight = 260;
+
+return (
+x > centerX - safeWidth / 2 - size / 2 &&
+x < centerX + safeWidth / 2 - size / 2 &&
+y > centerY - safeHeight / 2 - size / 2 &&
+y < centerY + safeHeight / 2 - size / 2
+);
+}
+
+function spawnMemoryPhotos() {
+memoryPhotos.forEach((src, index) => {
+setTimeout(() => {
+const img = document.createElement("img");
+img.src = src;
+img.className = "memory-photo";
+
+const size = Math.random() * 70 + 90;
+img.style.width = size + "px";
+img.style.height = size + "px";
+
+let x, y;
+let attempts = 0;
+
+do {
+x = Math.random() * (window.innerWidth - size);
+y = Math.random() * (window.innerHeight - size);
+attempts++;
+} while (isTooCloseToCenter(x, y, size) && attempts < 15);
+
+img.style.left = x + "px";
+img.style.top = y + "px";
+
+const rotation = Math.random() * 30 - 15;
+img.style.transform = `scale(0.5) rotate(${rotation}deg)`;
+
+img.addEventListener("click", () => openPhotoOverlay(src));
+
+document.body.appendChild(img);
+}, index * 350);
+});
+}
+
+const overlay = document.getElementById("photoOverlay");
+const overlayImg = document.getElementById("overlayImg");
+
+function openPhotoOverlay(src) {
+overlayImg.src = src;
+overlay.style.display = "flex";
+}
+
+overlay.addEventListener("click", (e) => {
+if (e.target === overlay) {
+overlay.style.display = "none";
+overlayImg.src = "";
+}
+});
 
 let scale = 1;
 
@@ -252,7 +334,8 @@ music.play();
 
 muteBtn.style.display = "block";
 startConfetti();
-
+spawnMemoryPhotos();
+  
 setTimeout(() => {
 music.pause();
 }, MUSIC_PLAY_DURATION * 1000);
