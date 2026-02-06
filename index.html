@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Be My Valentine? 💖</title>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
@@ -106,54 +106,12 @@ pointer-events: none;
 z-index: 999;
 }
 
-/* HEART PHOTOS */
-.memory-photo {
-position: fixed;
-object-fit: cover;
-clip-path: path(
-"M50 15
-C35 -5 0 10 0 40
-C0 75 50 95 50 95
-C50 95 100 75 100 40
-C100 10 65 -5 50 15Z"
-);
-box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-opacity: 0;
-animation: popIn 0.6s ease forwards, float 6s ease-in-out infinite;
-z-index: 5;
-cursor: pointer;
-}
-
-@keyframes popIn {
+@keyframes fadeIn {
+from { opacity: 0; transform: scale(0.95); }
 to { opacity: 1; transform: scale(1); }
 }
-
-@keyframes float {
-0% { transform: translateY(0); }
-50% { transform: translateY(-12px); }
-100% { transform: translateY(0); }
-}
-
-/* OVERLAY */
-#photoOverlay {
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.75);
-display: none;
-justify-content: center;
-align-items: center;
-z-index: 2000;
-}
-
-#photoOverlay img {
-max-width: 85%;
-max-height: 85%;
-border-radius: 16px;
-}
-
 </style>
 </head>
-
 <body>
 
 <!-- CONFETTI -->
@@ -173,15 +131,10 @@ border-radius: 16px;
 <div class="final-page" id="finalPage">
 <h2>Yayyy!!! 🎉💞</h2>
 <p>You just made me the happiest person ❤️</p>
-  
+
 <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdnZlbmg5dWlqNTBvZjZpZXB5OXo5dDNsaDlnMDh4Y2FleGgxNDY4aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/t3sZxY5zS5B0z5zMIz/giphy.gif" alt="Happy Gif">
 
 <p>Happy Valentine’s Day, my love 🥰</p>
-</div>
-
-<!-- OVERLAY -->
-<div id="photoOverlay">
-<img id="overlayImg">
 </div>
 
 <!-- AUDIO -->
@@ -189,47 +142,20 @@ border-radius: 16px;
 <source src="music.mp3" type="audio/mpeg">
 </audio>
 
+<!-- MUTE BUTTON -->
 <button id="muteBtn">🔊</button>
 
 <script>
-const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
 const popup = document.getElementById("popup");
 const finalPage = document.getElementById("finalPage");
 const music = document.getElementById("bgMusic");
 const muteBtn = document.getElementById("muteBtn");
 
-const MUSIC_START_TIME = 5;
-const MUSIC_PLAY_DURATION = 180;
-
-const memoryPhotos = [
-"IMG68.jpeg",
-"IMG69.jpeg",
-"IMG70.jpeg",
-"IMG71.jpeg",
-"IMG72.jpeg",
-"IMG26.jpeg",
-"IMG27.jpeg",
-"IMG28.jpeg",
-"IMG29.jpeg",
-"IMG30.jpeg",
-"IMG31.jpeg",
-"IMG32.jpeg",
-"IMG33.jpeg",
-"IMG34.jpeg",
-"IMG35.jpeg",
-"IMG36.jpeg",
-"IMG37.jpeg",
-"IMG38.jpeg",
-"IMG39.jpeg",
-"IMG40.jpeg",
-"IMG41.jpeg",
-"IMG42.jpeg",
-"IMG43.jpeg",
-"IMG44.jpeg",
-"IMG45.jpeg",
-"IMG46.jpeg"
-];
+/* 🎵 MUSIC CONFIG */
+const MUSIC_START_TIME = 5; // seconds
+const MUSIC_PLAY_DURATION = 180; // seconds
 
 let scale = 1;
 
@@ -250,59 +176,6 @@ noBtn.addEventListener("touchstart", e => {
 e.preventDefault();
 moveNoButton();
 });
-
-// CENTER AVOIDANCE
-function isTooCloseToCenter(x, y, size) {
-const cx = innerWidth / 2;
-const cy = innerHeight / 2;
-return (
-x > cx - 120 &&
-x < cx + 120 &&
-y > cy - 180 &&
-y < cy + 180
-);
-}
-
-// SPAWN PHOTOS
-function spawnMemoryPhotos() {
-memoryPhotos.forEach((src, i) => {
-setTimeout(() => {
-const img = document.createElement("img");
-img.src = src;
-img.className = "memory-photo";
-
-const size = Math.random() * 70 + 90;
-img.style.width = size + "px";
-img.style.height = size + "px";
-
-let x, y;
-do {
-x = Math.random() * (innerWidth - size);
-y = Math.random() * (innerHeight - size);
-} while (isTooCloseToCenter(x, y, size));
-
-img.style.left = x + "px";
-img.style.top = y + "px";
-
-img.addEventListener("click", () => openOverlay(src));
-
-document.body.appendChild(img);
-}, i * 350);
-});
-}
-
-// OVERLAY
-const overlay = document.getElementById("photoOverlay");
-const overlayImg = document.getElementById("overlayImg");
-
-function openOverlay(src) {
-overlayImg.src = src;
-overlay.style.display = "flex";
-}
-
-overlay.onclick = e => {
-if (e.target === overlay) overlay.style.display = "none";
-};
 
 yesBtn.addEventListener("click", () => {
 popup.style.display = "none";
