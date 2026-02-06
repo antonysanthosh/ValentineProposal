@@ -265,8 +265,8 @@ function isTooCloseToCenter(x, y, size) {
 const centerX = window.innerWidth / 2;
 const centerY = window.innerHeight / 2;
 
-const safeWidth = 500; // approx GIF width
-const safeHeight = 900; // approx GIF height
+const safeWidth = 400; // approx GIF width
+const safeHeight = 750; // approx GIF height
 
 return (
 x > centerX - safeWidth / 2 - size / 2 &&
@@ -289,7 +289,7 @@ img.style.height = size + "px";
 
 let x, y;
 let attempts = 0;
-let minDistance = 150;
+let minDistance = 250;
 
 do {
 x = Math.random() * (window.innerWidth - size);
