@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Valentine ❤️</title>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
+<style>
+body {
 margin: 0;
 height: 100vh;
 background: linear-gradient(135deg, #ff9a9e, #fad0c4);
@@ -17,8 +17,7 @@ align-items: center;
 overflow: hidden;
 }
 
-        /* POPUP */
-        .popup, .final-page {
+.popup, .final-page {
 background: white;
 padding: 25px;
 border-radius: 20px;
@@ -28,17 +27,16 @@ width: 90%;
 max-width: 360px;
 }
 
-        .box {
-            background: white;
-padding: 25px;
-border-radius: 20px;
-text-align: center;
-box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-width: 90%;
-max-width: 360px;
-        }
+h1, h2 {
+color: #ff4d6d;
+}
 
-        .buttons {
+p {
+color: #444;
+font-size: 16px;
+}
+
+.buttons {
 margin-top: 25px;
 position: relative;
 height: 120px;
@@ -54,24 +52,23 @@ position: absolute;
 transition: all 0.2s ease;
 }
 
-        #yes {
+#yes {
 background: #ff4d6d;
 color: white;
 left: 50%;
 transform: translateX(-50%);
 bottom: 0;
-        }
+}
 
-        #no {
+#no {
 background: #ddd;
 color: #333;
 left: 50%;
 transform: translateX(-50%);
 top: 0;
-        }
+}
 
-        /* FINAL PAGE (UNCHANGED UI) */
-       .final-page {
+.final-page {
 display: none;
 flex-direction: column;
 gap: 15px;
@@ -83,77 +80,22 @@ width: 100%;
 border-radius: 15px;
 }
 
-       h1, h2 {
-color: #ff4d6d;
+#muteBtn {
+display: none;
+position: fixed;
+top: 15px;
+right: 15px;
+background: white;
+border: none;
+border-radius: 50%;
+width: 48px;
+height: 48px;
+font-size: 20px;
+cursor: pointer;
+box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+z-index: 1000;
 }
 
-p {
-color: #444;
-font-size: 16px;
-}
-
-        /* HEART-SHAPED FLOATING PHOTOS */
-        .memory-photo {
-            position: fixed;
-            object-fit: cover;
-            clip-path: path( "M50 15 C35 -5 0 10 0 40 C0 75 50 95 50 95 C50 95 100 75 100 40 C100 10 65 -5 50 15Z" );
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            opacity: 0;
-            animation: popIn 0.6s ease forwards, float 6s ease-in-out infinite;
-            z-index: 5;
-            cursor: pointer;
-        }
-
-        @keyframes popIn {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-12px);
-            }
-
-            100% {
-                transform: translateY(0);
-            }
-        }
-
-        /* IMAGE OVERLAY */
-        #photoOverlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.75);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-            #photoOverlay img {
-                max-width: 85%;
-                max-height: 85%;
-                border-radius: 16px;
-            }
-
-        /* MUTE BUTTON */
-        #muteBtn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: white;
-            border-radius: 50%;
-            padding: 10px 14px;
-            display: none;
-            z-index: 1500;
-        }
-        
 #confetti {
 position: fixed;
 top: 0;
@@ -168,21 +110,22 @@ z-index: 999;
 from { opacity: 0; transform: scale(0.95); }
 to { opacity: 1; transform: scale(1); }
 }
-    </style>
+</style>
 </head>
-
 <body>
 
-    <!-- CONFETTI -->
+<!-- CONFETTI -->
 <canvas id="confetti"></canvas>
-    <!-- POPUP -->
-    <div id="popup">
-        <div class="box">
-            <h2>Will you be my Valentine? 💖</h2>
-            <button id="yes">Sure ❤️</button>
-            <button id="no">No 😅</button>
-        </div>
-    </div>
+
+<!-- POPUP PAGE -->
+<div class="popup" id="popup">
+<h1>Will you be my Valentine? 💘</h1>
+
+<div class="buttons">
+<button id="no">No 🙄</button>
+<button id="yes">Yes 💖</button>
+</div>
+</div>
 
 <!-- FINAL PAGE -->
 <div class="final-page" id="finalPage">
@@ -194,162 +137,113 @@ to { opacity: 1; transform: scale(1); }
 <p>Happy Valentine’s Day, my love 🥰</p>
 </div>
 
-    <!-- IMAGE OVERLAY -->
-    <div id="photoOverlay">
-        <img id="overlayImg">
-    </div>
+<!-- AUDIO -->
+<audio id="bgMusic">
+<source src="music.mp3" type="audio/mpeg">
+</audio>
 
-    <audio id="bgMusic" src="music.mp3"></audio>
-    <button id="muteBtn">🔊</button>
+<!-- MUTE BUTTON -->
+<button id="muteBtn">🔊</button>
 
-    <script>
-        const yesBtn = document.getElementById("yes");
-        const noBtn = document.getElementById("no");
-        const popup = document.getElementById("popup");
-        const finalPage = document.getElementById("finalPage");
-        const music = document.getElementById("bgMusic");
-        const muteBtn = document.getElementById("muteBtn");
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const popup = document.getElementById("popup");
+const finalPage = document.getElementById("finalPage");
+const music = document.getElementById("bgMusic");
+const muteBtn = document.getElementById("muteBtn");
 
-        const MUSIC_START_TIME = 5;
-        const MUSIC_PLAY_DURATION = 180;
+/* 🎵 MUSIC CONFIG */
+const MUSIC_START_TIME = 5; // seconds
+const MUSIC_PLAY_DURATION = 180; // seconds
 
-        const memoryPhotos = [
-            "IMG68.jpeg",
-            "IMG69.jpeg",
-            "IMG70.jpeg",
-            "IMG71.jpeg",
-            "IMG72.jpeg",
-            "IMG26.jpeg",
-            "IMG27.jpeg",
-            "IMG28.jpeg",
-            "IMG29.jpeg",
-            "IMG30.jpeg",
-            "IMG31.jpeg",
-            "IMG32.jpeg",
-            "IMG33.jpeg",
-            "IMG34.jpeg",
-            "IMG35.jpeg",
-            "IMG36.jpeg",
-            "IMG37.jpeg",
-            "IMG38.jpeg",
-            "IMG39.jpeg",
-            "IMG40.jpeg",
-            "IMG41.jpeg",
-            "IMG42.jpeg",
-            "IMG43.jpeg",
-            "IMG44.jpeg",
-            "IMG45.jpeg",
-            "IMG46.jpeg"
-        ];
+let scale = 1;
 
-        let scale = 1;
-        /* NO BUTTON DODGE (UNCHANGED) */
-        function dodge() {
-            const maxX = window.innerWidth - noBtn.offsetWidth;
+function moveNoButton() {
+const maxX = window.innerWidth - noBtn.offsetWidth;
 const maxY = window.innerHeight - noBtn.offsetHeight;
 
 scale = Math.max(0.4, scale - 0.1);
-            noBtn.style.position = "fixed";
+
+noBtn.style.position = "fixed";
 noBtn.style.left = Math.random() * maxX + "px";
 noBtn.style.top = Math.random() * maxY + "px";
 noBtn.style.transform = `scale(${scale})`;
-        }
-        noBtn.addEventListener("mouseover", dodge);
-        noBtn.addEventListener("touchstart", e => {
+}
+
+noBtn.addEventListener("mouseenter", moveNoButton);
+noBtn.addEventListener("touchstart", e => {
 e.preventDefault();
-            dodge()});
+moveNoButton();
+});
 
-        /* KEEP PHOTOS AWAY FROM CENTER GIF */
-        function isTooCloseToCenter(x, y, size) {
-            const cx = innerWidth / 2;
-            const cy = innerHeight / 2;
-            return (
-                x > cx - 140 &&
-                x < cx + 140 &&
-                y > cy - 200 &&
-                y < cy + 200
-            );
-        }
+yesBtn.addEventListener("click", () => {
+popup.style.display = "none";
+finalPage.style.display = "flex";
 
-        /* SPAWN FLOATING HEART PHOTOS */
-        function spawnMemoryPhotos() {
-            memoryPhotos.forEach((src, i) => {
-                setTimeout(() => {
-                    const img = document.createElement("img");
-                    img.src = src;
-                    img.className = "memory-photo";
+music.currentTime = MUSIC_START_TIME;
+music.play();
 
-                    const size = Math.random() * 70 + 90;
-                    img.style.width = size + "px";
-                    img.style.height = size + "px";
+muteBtn.style.display = "block";
+startConfetti();
 
-                    let x, y;
-                    do {
-                        x = Math.random() * (innerWidth - size);
-                        y = Math.random() * (innerHeight - size);
-                    } while (isTooCloseToCenter(x, y, size));
+setTimeout(() => {
+music.pause();
+}, MUSIC_PLAY_DURATION * 1000);
+});
 
-                    img.style.left = x + "px";
-                    img.style.top = y + "px";
+muteBtn.addEventListener("click", () => {
+music.muted = !music.muted;
+muteBtn.textContent = music.muted ? "🔇" : "🔊";
+});
 
-                    img.onclick = () => openOverlay(src);
-                    document.body.appendChild(img);
-                }, i * 350);
-            });
-        }
+/* 🎊 CONFETTI */
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-        /* TAP TO ENLARGE */
-        const overlay = document.getElementById("photoOverlay");
-        const overlayImg = document.getElementById("overlayImg");
+const colors = ["#ff4d6d", "#ffb3c6", "#ffd6e0", "#ffffff"];
+let confetti = [];
 
-        function openOverlay(src) {
-            overlayImg.src = src;
-            overlay.style.display = "flex";
-        }
+function createConfetti() {
+confetti = [];
+for (let i = 0; i < 150; i++) {
+confetti.push({
+x: Math.random() * canvas.width,
+y: Math.random() * -canvas.height,
+r: Math.random() * 6 + 4,
+d: Math.random() * 0.5 + 0.5,
+color: colors[Math.floor(Math.random() * colors.length)]
+});
+}
+}
 
-        overlay.onclick = e => {
-            if (e.target === overlay) {
-                overlay.style.display = "none";
-                overlayImg.src = "";
-            }
-        };
+function drawConfetti() {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+confetti.forEach(p => {
+ctx.beginPath();
+ctx.fillStyle = p.color;
+ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+ctx.fill();
+p.y += p.d * 6;
+});
+}
 
-        /* CONFETTI */
-        function startConfetti() {
-            for (let i = 0; i < 80; i++) {
-                const c = document.createElement("div");
-                c.style.position = "fixed";
-                c.style.width = "8px";
-                c.style.height = "8px";
-                c.style.background = `hsl(${Math.random() * 360},100%,70%)`;
-                c.style.left = Math.random() * 100 + "vw";
-                c.style.top = "-10px";
-                c.style.animation = "fall 3s linear";
-                document.body.appendChild(c);
-                setTimeout(() => c.remove(), 3000);
-            }
-        }
+function startConfetti() {
+createConfetti();
+const interval = setInterval(drawConfetti, 20);
+setTimeout(() => {
+clearInterval(interval);
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+}, 2500);
+}
 
-        /* YES CLICK (UNCHANGED FLOW + PHOTOS ADDED) */
-        yesBtn.onclick = () => {
-            popup.style.display = "none";
-            finalPage.style.display = "flex";
-
-            music.currentTime = MUSIC_START_TIME;
-            music.play();
-            muteBtn.style.display = "block";
-
-            startConfetti();
-            spawnMemoryPhotos();
-
-            setTimeout(() => music.pause(), MUSIC_PLAY_DURATION * 1000);
-        };
-
-        muteBtn.onclick = () => {
-            music.muted = !music.muted;
-            muteBtn.textContent = music.muted ? "🔇" : "🔊";
-        };
-    </script>
+window.addEventListener("resize", () => {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+});
+</script>
 
 </body>
 </html>
