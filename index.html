@@ -110,6 +110,30 @@ z-index: 999;
 from { opacity: 0; transform: scale(0.95); }
 to { opacity: 1; transform: scale(1); }
 }
+
+.memory-photo {
+position: fixed;
+object-fit: cover;
+border-radius: 12px;
+box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+opacity: 0;
+animation: photoPop 0.6s ease forwards, float 6s ease-in-out infinite;
+z-index: 5;
+}
+
+@keyframes photoPop {
+to {
+opacity: 1;
+transform: scale(1);
+}
+}
+
+@keyframes float {
+0% { transform: translateY(0); }
+50% { transform: translateY(-10px); }
+100% { transform: translateY(0); }
+}
+
 </style>
 </head>
 <body>
@@ -146,6 +170,34 @@ to { opacity: 1; transform: scale(1); }
 <button id="muteBtn">🔊</button>
 
 <script>
+const memoryPhotos = [
+"IMG68.jpeg",
+"IMG69.jpeg",
+"IMG70.jpeg",
+"IMG71.jpeg",
+"IMG72.jpeg",
+"IMG26.jpeg",
+"IMG27.jpeg",
+"IMG28.jpeg",
+"IMG29.jpeg",
+"IMG30.jpeg",
+"IMG31.jpeg",
+"IMG32.jpeg",
+"IMG33.jpeg",
+"IMG34.jpeg",
+"IMG35.jpeg",
+"IMG36.jpeg",
+"IMG37.jpeg",
+"IMG38.jpeg",
+"IMG39.jpeg",
+"IMG40.jpeg",
+"IMG41.jpeg",
+"IMG42.jpeg",
+"IMG43.jpeg",
+"IMG44.jpeg",
+"IMG45.jpeg",
+"IMG46.jpeg"
+];
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 const popup = document.getElementById("popup");
@@ -186,6 +238,7 @@ music.play();
 
 muteBtn.style.display = "block";
 startConfetti();
+spawnMemoryPhotos();
 
 setTimeout(() => {
 music.pause();
@@ -196,6 +249,51 @@ muteBtn.addEventListener("click", () => {
 music.muted = !music.muted;
 muteBtn.textContent = music.muted ? "🔇" : "🔊";
 });
+
+function isTooCloseToCenter(x, y, size) {
+const centerX = window.innerWidth / 2;
+const centerY = window.innerHeight / 2;
+
+const safeWidth = 220; // approx GIF width
+const safeHeight = 260; // approx GIF height
+
+return (
+x > centerX - safeWidth / 2 - size / 2 &&
+x < centerX + safeWidth / 2 - size / 2 &&
+y > centerY - safeHeight / 2 - size / 2 &&
+y < centerY + safeHeight / 2 - size / 2
+);
+}
+
+function spawnMemoryPhotos() {
+memoryPhotos.forEach((src, index) => {
+setTimeout(() => {
+const img = document.createElement("img");
+img.src = src;
+img.className = "memory-photo";
+
+const size = Math.random() * 80 + 90; // 90–170px
+img.style.width = size + "px";
+img.style.height = size + "px";
+
+let x, y;
+let attempts = 0;
+
+do {
+x = Math.random() * (window.innerWidth - size);
+y = Math.random() * (window.innerHeight - size);
+attempts++;
+} while (isTooCloseToCenter(x, y, size) && attempts < 15);
+
+img.style.left = x + "px";
+img.style.top = y + "px";
+
+img.style.transform = "scale(0.5)";
+
+document.body.appendChild(img);
+}, index * 300); // staggered pop-in
+});
+}
 
 /* 🎊 CONFETTI */
 const canvas = document.getElementById("confetti");
